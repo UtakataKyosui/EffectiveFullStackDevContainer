@@ -8,6 +8,7 @@ services:
       - devcontainer-cargo-cache:/home/utakata/.cargo/registry
       - devcontainer-npm-cache:/home/utakata/.npm
       - devcontainer-target-cache:/tmp/target
+      - devcontainer-next-cache:/workspaces/.next
     network_mode: "host"
     env_file:
       - .env
@@ -36,3 +37,4 @@ volumes:
   devcontainer-npm-cache:
   devcontainer-target-cache:
   postgres-data:
+  devcontainer-next-cache: 
