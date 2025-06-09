@@ -8,16 +8,10 @@ services:
       - devcontainer-cargo-cache:/home/utakata/.cargo/registry
       - devcontainer-npm-cache:/home/utakata/.npm
       - devcontainer-target-cache:/tmp/target
+      - devcontainer-next-cache:/workspaces/.next
     network_mode: "host"
-    environment:
-      - CARGO_TARGET_DIR=/tmp/target
-      - CARGO_INCREMENTAL=0
-      - RUST_BACKTRACE=0
-      - VSCODE_IPC_HOOK_CLI=
-      - DATABASE_URL=postgres://utakata:password123@localhost:5432/loco_dev
-      - POSTGRES_USER=utakata
-      - POSTGRES_PASSWORD=password123
-      - POSTGRES_DB=loco_dev
+    env_file:
+      - .env
     depends_on:
       postgres:
         condition: service_healthy
@@ -26,13 +20,10 @@ services:
   postgres:
     image: postgres:15-alpine
     restart: unless-stopped
-    environment:
-      POSTGRES_USER: utakata
-      POSTGRES_PASSWORD: password123
-      POSTGRES_DB: loco_dev
-      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
     ports:
       - "5432:5432"
+    env_file:
+      - .env
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
@@ -46,3 +37,4 @@ volumes:
   devcontainer-npm-cache:
   devcontainer-target-cache:
   postgres-data:
+  devcontainer-next-cache: 
