@@ -1,0 +1,104 @@
+services:
+  # Frontend development environment
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    volumes:
+      - ../../:/workspaces:cached
+      - devcontainer-npm-cache:/home/utakata/.npm
+      - devcontainer-next-cache:/workspaces/.next
+      - devcontainer-cargo-cache:/home/utakata/.cargo/registry
+      - devcontainer-target-cache:/tmp/target
+    networks:
+      - db
+      - redis  
+      - mailer
+    env_file:
+      - ../.env
+    depends_on:
+      loco:
+        condition: service_started
+    working_dir: /workspaces
+    command: sleep infinity
+
+  # Backend service (Loco auto-start)
+  loco:
+    build:
+      context: .
+      dockerfile: booting-dockerfile-backend
+    volumes:
+      - ../../:/workspaces:cached
+      - devcontainer-cargo-cache:/home/utakata/.cargo/registry
+      - devcontainer-target-cache:/tmp/target
+    networks:
+      - db
+      - redis  
+      - mailer
+    env_file:
+      - ../.env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    working_dir: /workspaces
+    ports:
+      - "5150:5150"
+    # Auto-start Loco backend with server and worker
+    command: /bin/bash -c "cd /workspaces && cargo loco start --server-and-worker"
+
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    env_file:
+      - ../.env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U utakata -d loco_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for queues and caching
+  redis:
+    image: redis:7.2
+    container_name: dev-redis-boot
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - redis
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+
+  # MailTutan - 開発用SMTPサーバー（Loco公式推奨）
+  mailer:
+    image: mailtutan/mailtutan:1.2.3
+    container_name: dev-mailer-boot
+    restart: unless-stopped
+    ports:
+      - "1080:1080"  # Web UI
+      - "1025:1025"  # SMTP Port
+    networks:
+      - mailer
+
+networks:
+  db:
+    driver: bridge
+  redis:
+    driver: bridge
+  mailer:
+    driver: bridge
+
+volumes:
+  devcontainer-cargo-cache:
+  devcontainer-npm-cache:
+  devcontainer-target-cache:
+  postgres-data:
+  redis-data:
+  devcontainer-next-cache: 

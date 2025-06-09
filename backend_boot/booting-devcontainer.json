@@ -1,0 +1,119 @@
+{
+  "name": "Next.js + Loco + PostgreSQL Development Environment (Backend Auto-Boot)",
+  "dockerComposeFile": "booting-compose.yaml",
+  "service": "app",
+  "workspaceFolder": "/workspaces",
+  "remoteUser": "utakata",
+  "shutdownAction": "stopCompose",
+  "features": {
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rust-lang.rust-analyzer",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next",
+        "ms-vscode.vscode-json",
+        "formulahendry.auto-rename-tag",
+        "christian-kohler.path-intellisense",
+        "ms-vscode.vscode-eslint",
+        "tamasfe.even-better-toml",
+        "serayuzgur.crates",
+        "ms-vscode.vscode-postgresql",
+        "redhat.vscode-yaml"
+      ],
+      "settings": {
+        "rust-analyzer.checkOnSave.command": "clippy",
+        "rust-analyzer.cargo.buildScripts.enable": false,
+        "rust-analyzer.procMacro.enable": false,
+        "rust-analyzer.diagnostics.disabled": ["unresolved-proc-macro"],
+        "rust-analyzer.cargo.loadOutDirsFromCheck": true,
+        "rust-analyzer.completion.addCallParentheses": false,
+        "rust-analyzer.completion.addCallArgumentSnippets": false,
+        "rust-analyzer.lens.enable": false,
+        "rust-analyzer.inlayHints.enable": false,
+        "editor.formatOnSave": false,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "[rust]": {
+          "editor.defaultFormatter": "rust-lang.rust-analyzer",
+          "editor.formatOnSave": false
+        },
+        "[toml]": {
+          "editor.defaultFormatter": "tamasfe.even-better-toml"
+        },
+        "[yaml]": {
+          "editor.formatOnSave": false,
+          "editor.formatOnType": false,
+          "editor.formatOnPaste": false,
+          "editor.autoIndent": "none"
+        },
+        "[yml]": {
+          "editor.formatOnSave": false,
+          "editor.formatOnType": false,
+          "editor.formatOnPaste": false,
+          "editor.autoIndent": "none"
+        },
+        "yaml.format.enable": false,
+        "yaml.format.singleQuote": false,
+        "yaml.format.bracketSpacing": false,
+        "yaml.customTags": [],
+        "prettier.disableLanguages": ["yaml", "yml"],
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "/bin/bash",
+            "args": ["-l"]
+          }
+        },
+        "files.watcherExclude": {
+           "**/target/**": true,
+          "**/node_modules/**": true,
+          "**/.git/**": true,
+          "**/tmp/**": true,
+          "**/.next/**": true,
+          "**/dist/**": true,
+          "**/.cargo/**": true
+        },
+        "search.exclude": {
+          "**/target": true,
+          "**/node_modules": true,
+          "**/.git": true,
+          "**/tmp": true
+        },
+        "remote.autoForwardPorts": false,
+        "remote.restoreForwardedPorts": false
+      }
+    }
+  },
+  "forwardPorts": [3000, 5150, 5432, 6379, 1080, 1025],
+  "portsAttributes": {
+    "3000": {
+      "label": "Next.js Dev Server",
+      "onAutoForward": "notify"
+    },
+    "5150": {
+      "label": "Loco Server (Auto-Started)",
+      "onAutoForward": "notify"
+    },
+    "5432": {
+      "label": "PostgreSQL Database",
+      "onAutoForward": "silent"
+    },
+    "6379": {
+      "label": "Redis Server",
+      "onAutoForward": "silent"
+    },
+    "1080": {
+      "label": "SMTP Web UI",
+      "onAutoForward": "notify"
+    },
+    "1025": {
+      "label": "SMTP Server",
+      "onAutoForward": "silent"
+    }
+  },
+  "postCreateCommand": "echo 'Backend will auto-start with: cargo loco start --server-and-worker'",
+  "postStartCommand": "echo 'Loco backend should be running on port 5150. Check logs with: docker compose logs loco'"
+}
