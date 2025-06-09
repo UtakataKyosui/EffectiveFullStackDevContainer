@@ -39,6 +39,8 @@ RUN apt-get update && apt-get install -y \
     python3 \
     # Node.js用の依存関係
     xz-utils \
+    libssl3 \ 
+	libssl3-dev \
     && apt-get upgrade -y \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean \
