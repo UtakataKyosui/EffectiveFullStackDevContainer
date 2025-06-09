@@ -27,6 +27,8 @@ services:
       - "5432:5432"
     env_file:
       - .env
+    networks:
+      - db
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
