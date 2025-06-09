@@ -88,7 +88,7 @@
       }
     }
   },
-  "forwardPorts": [3000, 5150, 5432],
+  "forwardPorts": [3000, 5150, 5432,6379,1080,1025],
   "portsAttributes": {
     "3000": {
       "label": "Next.js Dev Server",
@@ -101,6 +101,18 @@
     "5432": {
       "label": "PostgreSQL Database",
       "onAutoForward": "silent"
-    }
-  }
+    },
+	"6379": {
+	  "label": "Redis Server",
+	  "onAutoForward": "silent"
+	},
+	"1080": {
+	  "label": "SMTP Web UI",
+	  "onAutoForward": "notify"
+	},
+	"1025": {
+		"label": "SMTP Server",
+		"onAutoForward": "silent"
+	}
+	}
 }
