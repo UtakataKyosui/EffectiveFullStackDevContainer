@@ -89,7 +89,7 @@ RUN apt-get update && apt-get install -y sudo \
 
 # Install Claude Code and verify installations
 # RUN sudo npm install -g @anthropic-ai/claude-code && \
-RUN /bin/bash -c "source ~/.cargo/env && rustc --version && cargo --version" && \
+RUN rustc --version && cargo --version" && \
     node --version && npm --version
 # -----------------------------------------------------------------------------
 # Stage 4: 最終開発環境
