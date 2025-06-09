@@ -42,7 +42,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
-    working_dir: /workspaces
     ports:
       - "5150:5150"
     # Auto-start Loco backend with server and worker (uses Dockerfile CMD)
