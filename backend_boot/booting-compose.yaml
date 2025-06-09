@@ -5,7 +5,7 @@ services:
       context: ..
       dockerfile: Dockerfile
     volumes:
-      - ../../:/workspaces:cached
+      - ../:/workspaces:cached
       - devcontainer-npm-cache:/home/utakata/.npm
       - devcontainer-next-cache:/workspaces/.next
       - devcontainer-cargo-cache:/home/utakata/.cargo/registry
@@ -28,7 +28,7 @@ services:
       context: .
       dockerfile: booting-dockerfile-backend
     volumes:
-      - ../../:/workspaces:cached
+      - ../:/workspaces:cached
       - devcontainer-cargo-cache:/root/.cargo/registry 
       - devcontainer-target-cache:/tmp/target
     networks:
@@ -59,7 +59,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U loco -d loco_app"]
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
       interval: 10s
       timeout: 5s
       retries: 5
