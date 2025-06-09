@@ -45,8 +45,7 @@ services:
     working_dir: /workspaces
     ports:
       - "5150:5150"
-    # Auto-start Loco backend with server and worker
-    command: /bin/bash -c "cd /workspaces && cargo loco start --server-and-worker"
+    # Auto-start Loco backend with server and worker (uses Dockerfile CMD)
 
   db:
     image: postgres:15-alpine
@@ -55,6 +54,8 @@ services:
       - "5432:5432"
     env_file:
       - ../.env
+    networks:
+      - db
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
