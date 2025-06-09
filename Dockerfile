@@ -10,7 +10,7 @@ ENV NODE_VERSION=20
 RUN apt-get update && \
     apt-get install -y curl wget git ca-certificates sudo && \
     apt-get install -y build-essential pkg-config && \
-    apt-get install -y libssl-dev libpq-dev libsqlite3-dev libmysqlclient-dev && \
+    apt-get install -y libssl-dev libpq-dev  && \
     apt-get install -y unzip jq vim nano htop tree && \
     apt-get install -y postgresql-client && \
     rm -rf /var/lib/apt/lists/*
@@ -77,8 +77,8 @@ RUN /bin/bash -c "source ~/.cargo/env && \
     (cargo install --locked loco || echo 'loco-cli installation failed')"
 
 # Install Claude Code and verify installations
-RUN sudo npm install -g @anthropic-ai/claude-code && \
-    /bin/bash -c "source ~/.cargo/env && rustc --version && cargo --version" && \
+# RUN sudo npm install -g @anthropic-ai/claude-code && \
+RUN /bin/bash -c "source ~/.cargo/env && rustc --version && cargo --version" && \
     node --version && npm --version
 
 # Create and set permissions for target directory
