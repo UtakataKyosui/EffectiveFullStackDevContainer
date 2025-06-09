@@ -20,7 +20,7 @@ RUN apt-get update && \
 # -----------------------------------------------------------------------------
 # Stage 2: Rust基盤 (Debian Slim) + Node.js追加
 # -----------------------------------------------------------------------------
-FROM mcr.microsoft.com/devcontainers/rust:latest AS rust-base
+FROM rust:1.87.0-bullseye AS rust-base
 
 # 必要なシステムパッケージのインストール
 RUN apt-get update && apt-get install -y \
