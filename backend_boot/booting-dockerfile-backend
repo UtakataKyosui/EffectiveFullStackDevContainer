@@ -2,7 +2,7 @@
 # バックエンド実行環境: Loco (Rust) 特化
 # =============================================================================
 
-FROM rust:1.87.0-slim-bullseye AS base
+FROM rust:1.87.0-bullseye AS base
 
 # Rust/Loco開発に必要なシステムパッケージのインストール
 RUN apt-get update && apt-get install -y \
