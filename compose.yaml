@@ -9,15 +9,18 @@ services:
       - devcontainer-npm-cache:/home/utakata/.npm
       - devcontainer-target-cache:/tmp/target
       - devcontainer-next-cache:/workspaces/.next
-    network_mode: "host"
+    networks:
+      - db
+      - redis  
+      - mailer
     env_file:
       - .env
     depends_on:
-      postgres:
+      db:
         condition: service_healthy
     command: sleep infinity
 
-  postgres:
+  db:
     image: postgres:15-alpine
     restart: unless-stopped
     ports:
@@ -32,9 +35,42 @@ services:
       timeout: 5s
       retries: 5
 
+  # Redis for queues and caching
+  redis:
+    image: redis:7.2
+    container_name: dev-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - redis
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+
+  # MailTutan - 開発用SMTPサーバー（Loco公式推奨）
+  mailer:
+    image: mailtutan/mailtutan:1.2.3
+    container_name: dev-mailer
+    restart: unless-stopped
+    ports:
+      - "1080:1080"  # Web UI
+      - "1025:1025"  # SMTP Port
+    networks:
+      - mailer
+
+networks:
+  db:
+    driver: bridge
+  redis:
+    driver: bridge
+  mailer:
+    driver: bridge
+
 volumes:
   devcontainer-cargo-cache:
   devcontainer-npm-cache:
   devcontainer-target-cache:
   postgres-data:
+  redis-data:
   devcontainer-next-cache: 
