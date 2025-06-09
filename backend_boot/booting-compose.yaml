@@ -29,7 +29,7 @@ services:
       dockerfile: booting-dockerfile-backend
     volumes:
       - ../../:/workspaces:cached
-      - devcontainer-cargo-cache:/home/utakata/.cargo/registry
+      - devcontainer-cargo-cache:/root/.cargo/registry 
       - devcontainer-target-cache:/tmp/target
     networks:
       - db
@@ -59,7 +59,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U utakata -d loco_dev"]
+      test: ["CMD-SHELL", "pg_isready -U loco -d loco_app"]
       interval: 10s
       timeout: 5s
       retries: 5
