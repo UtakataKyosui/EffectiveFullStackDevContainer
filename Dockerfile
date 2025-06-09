@@ -105,6 +105,16 @@ WORKDIR /workspaces
 RUN mkdir -p /home/$USERNAME/.cargo \
     && echo '[build]\ntarget-dir = "/tmp/target"\n\n[net]\ngit-fetch-with-cli = true\n\n[registries.crates-io]\nprotocol = "sparse"' > /home/$USERNAME/.cargo/config.toml
 
+# /tmpディレクトリの権限を設定
+RUN sudo chown -R $USERNAME:$USERNAME /tmp \
+	&& sudo chmod -R 777 /tmp \
+	&& sudo mkdir -p /tmp/target \
+	&& sudo chown -R $USERNAME:$USERNAME /tmp/target \
+	&& sudo chmod -R 777 /tmp/target \
+	&& sudo mkdir -p /tmp/target/debug \
+	&& sudo chown -R $USERNAME:$USERNAME /tmp/target/debug \
+	&& sudo chmod -R 777 /tmp/target/debug 
+    
 # 環境変数の設定
 ENV CARGO_HOME=/home/$USERNAME/.cargo
 ENV CARGO_TARGET_DIR=/tmp/target
